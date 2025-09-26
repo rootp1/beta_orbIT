@@ -1,0 +1,50 @@
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { MiniKitProvider } from "@worldcoin/minikit-js/minikit-provider";
+import { AuthProvider } from "@/context/AuthContext"; 
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Orbital - Decentralized Campaign Platform",
+  description: "Launch and manage decentralized campaigns with World ID authentication and blockchain-powered funding.",
+  keywords: "blockchain, campaigns, World ID, decentralized, funding, crypto",
+  authors: [{ name: "Orbital Team" }],
+  robots: "index, follow",
+  openGraph: {
+    title: "Orbital - Decentralized Campaign Platform",
+    description: "Launch and manage decentralized campaigns with World ID authentication",
+    type: "website",
+    locale: "en_US",
+  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#3b82f6',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <AuthProvider>
+          <MiniKitProvider 
+            props={{
+              appId: process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID || ""
+            }}
+          >
+            {children}
+          </MiniKitProvider>
+        </AuthProvider>
+      </body>
+    </html>
+  );
+}
