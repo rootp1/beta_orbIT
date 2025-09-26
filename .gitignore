@@ -1,0 +1,22 @@
+# Compiler files
+cache/
+out/
+
+# Ignores development broadcast logs
+!/broadcast
+contracts/broadcast/*/31337/
+/broadcast/**/dry-run/
+
+# Docs
+docs/
+
+# Dotenv file
+.env
+node_modules
+lib/
+crazy
+contracts/broadcast/CampaignEscrow.s.sol/11155111/run-1758838428658.json
+supabase_schema_updates.sql
+contracts/broadcast/CampaignEscrow.s.sol/11155111/run-latest.json
+contracts/broadcast/CampaignEscrow.s.sol/11155111/run-latest.json
+contracts/broadcast/CampaignEscrow.s.sol/11155111/run-latest.json
