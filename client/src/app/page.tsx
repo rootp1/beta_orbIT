@@ -1,161 +1,288 @@
-'use client'; // 👈 Add this line to make it a Client Component
+'use client';
 
+import { useState } from 'react';
 import Link from "next/link";
 import SignInWithWalletButton from "@/components/SignInWithWalletButton";
 import VerifyWithWorldIDButton from "@/components/VerifyWithWorldIDButton";
-import FundCampaignButton from "@/components/FundCampaignButton";
-import MobileMenu from "@/components/MobileMenu";
 import { useAuth } from "@/context/AuthContext"; 
 
 export default function Home() {
-  // 👇 Add state to store the user's wallet address after login
-const { walletAddress, setWalletAddress } = useAuth();
+  const { walletAddress, setWalletAddress } = useAuth();
+  const [selectedMode, setSelectedMode] = useState<'user' | 'developer' | null>(null);
+  // Show mode selection if no mode is chosen
+  if (!selectedMode) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        {/* Simple Navigation */}
+        <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-center items-center h-16">
+              <div className="flex items-center space-x-2">
+                <span className="text-2xl">🚀</span>
+                <span className="font-bold text-xl text-gray-900">Orbital</span>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* Hero Section */}
+          <div className="text-center mb-16">
+            <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-6">
+              🚀 Welcome to Orbital
+            </h1>
+            <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              Decentralized app testing platform with World ID authentication
+            </p>
+            <p className="text-lg text-gray-500 mb-12">
+              Choose your experience to get started
+            </p>
+          </div>
+
+          {/* Mode Selection Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* User Mode */}
+            <div 
+              onClick={() => setSelectedMode('user')}
+              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200 p-8 hover:shadow-3xl transition-all duration-300 cursor-pointer transform hover:scale-105 group"
+            >
+              <div className="text-center">
+                <div className="text-6xl mb-6">👤</div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
+                  User Mode
+                </h2>
+                <p className="text-gray-600 mb-6 text-lg leading-relaxed">
+                  Test apps, complete tasks, and earn WLD tokens as a tester in the community
+                </p>
+                <div className="space-y-3 text-sm text-gray-500">
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>🎯</span>
+                    <span>Browse available apps to test</span>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>✅</span>
+                    <span>Complete testing tasks</span>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>💰</span>
+                    <span>Earn WLD rewards</span>
+                  </div>
+                </div>
+                <button className="mt-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 shadow-lg group-hover:shadow-xl">
+                  Enter as Tester
+                </button>
+              </div>
+            </div>
+
+            {/* Developer Mode */}
+            <div 
+              onClick={() => setSelectedMode('developer')}
+              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200 p-8 hover:shadow-3xl transition-all duration-300 cursor-pointer transform hover:scale-105 group"
+            >
+              <div className="text-center">
+                <div className="text-6xl mb-6">👨‍💻</div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors">
+                  Developer Mode
+                </h2>
+                <p className="text-gray-600 mb-6 text-lg leading-relaxed">
+                  Submit your apps for testing, create campaigns, and manage your testing programs
+                </p>
+                <div className="space-y-3 text-sm text-gray-500">
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>🚀</span>
+                    <span>Submit apps for testing</span>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>📊</span>
+                    <span>Manage testing campaigns</span>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>💎</span>
+                    <span>Set rewards & incentives</span>
+                  </div>
+                </div>
+                <button className="mt-8 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 shadow-lg group-hover:shadow-xl">
+                  Enter as Developer
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <footer className="mt-20 pt-8 border-t border-gray-200">
+            <div className="text-center text-gray-600">
+              <p className="text-sm">© 2025 Orbital Platform. Built with Next.js, World ID, and MiniKit.</p>
+              <p className="text-xs mt-2">Decentralized • Secure • Transparent</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+    );
+  }
+
+  // Show User Mode - Redirect to apps page
+  if (selectedMode === 'user') {
+    // Redirect to apps browsing page
+    window.location.href = '/apps';
+    return null;
+  }
+
+  // Show Developer Mode with authentication flow
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      {/* Navigation Bar */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+      {/* Developer Navigation */}
+      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🚀</span>
-              <span className="font-bold text-xl text-gray-900 hidden sm:block">Orbital</span>
+              <span className="font-bold text-xl text-gray-900">Orbital - Developer Mode</span>
             </div>
             <div className="flex items-center space-x-4">
-              {walletAddress && (
+              {walletAddress ? (
                 <>
-                  <Link href="/dashboard" className="hidden sm:block text-gray-600 hover:text-gray-900 transition-colors">
+                  <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
                     Dashboard
                   </Link>
-                  <Link href="/dashboard/create" className="hidden sm:block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">
+                  <Link href="/dashboard/create" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">
                     Create Campaign
                   </Link>
                 </>
-              )}
-              <MobileMenu />
+              ) : null}
+              <button 
+                onClick={() => setSelectedMode(null)}
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                ← Back
+              </button>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Hero Section */}
-        <div className="text-center mb-12 sm:mb-16">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
-            🚀 Orbital Campaign Platform
-          </h1>
-          <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Decentralized campaign funding with World ID authentication
-          </p>
-        </div>
-
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-12 sm:mb-16">
-          {/* Authentication Section */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <span className="text-3xl">🌍</span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-                Authentication
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
-              {walletAddress 
-                ? "Your wallet is connected. Now, verify you're a unique human to proceed."
-                : "Sign in securely using your wallet. This is the recommended primary auth flow."}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {!walletAddress ? (
+          // Authentication Step
+          <div className="text-center mb-12">
+            <div className="text-8xl mb-6">👨‍💻</div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+              Developer Authentication
+            </h1>
+            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+              Connect your wallet to access the developer dashboard and start creating testing campaigns for your apps.
             </p>
             
-            {/* Conditional rendering logic */}
-            {!walletAddress ? (
-              // If not signed in, show the wallet sign-in button
-              <SignInWithWalletButton onSignInSuccess={setWalletAddress} />
-            ) : (
-              // If signed in, show a success message and the World ID verify button
-              <div className="space-y-4 sm:space-y-6">
-                <div className="p-4 sm:p-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 rounded-xl text-center">
-                  <p className="text-sm text-green-600 mb-2">Connected Wallet</p>
-                  <p className="font-mono text-xs sm:text-sm break-all font-medium">{walletAddress}</p>
-                </div>
-                <VerifyWithWorldIDButton walletAddress={walletAddress} />
+            {/* Authentication Card */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200 p-8 max-w-md mx-auto">
+              <div className="flex items-center justify-center space-x-3 mb-6">
+                <span className="text-3xl">🌍</span>
+                <h2 className="text-2xl font-bold text-gray-800">Connect Wallet</h2>
               </div>
-            )}
-          </div>
-
-          {/* Campaign Funding Section */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <span className="text-3xl">💰</span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-                Fund Campaign
-              </h2>
+              <p className="text-gray-600 mb-8 text-sm leading-relaxed">
+                Sign in securely using your wallet to access developer features.
+              </p>
+              <SignInWithWalletButton onSignInSuccess={setWalletAddress} />
             </div>
-            <p className="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
-              Example of funding a campaign using the MiniKit SDK (requires contract deployment).
+          </div>
+        ) : (
+          // Authenticated Developer Dashboard
+          <div className="text-center mb-12">
+            <div className="text-8xl mb-6">✅</div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+              Welcome, Developer!
+            </h1>
+            <p className="text-xl text-gray-600 mb-8">
+              Your wallet is connected. Choose what you'd like to do:
             </p>
-            <FundCampaignButton 
-              campaignId="demo-campaign-123" 
-              amount="0.01" 
-            />
-          </div>
-        </div>
+            
+            {/* Connected Wallet Display */}
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 rounded-xl p-4 mb-8 max-w-md mx-auto">
+              <p className="text-sm text-green-600 mb-2">Connected Wallet</p>
+              <p className="font-mono text-xs break-all font-medium">{walletAddress}</p>
+            </div>
 
-        {/* Campaign Management Section */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 mb-8 hover:shadow-2xl transition-all duration-300">
-          <div className="flex items-center space-x-3 mb-6">
-            <span className="text-3xl">📋</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-              Campaign Management
-            </h2>
-          </div>
-          <p className="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
-            Create and manage your campaigns with our dashboard.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/dashboard" className="flex-1">
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                View Dashboard
-              </button>
-            </Link>
-            <Link href="/dashboard/create" className="flex-1">
-              <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                Create Campaign
-              </button>
-            </Link>
-          </div>
-        </div>
-        
-        {/* Setup Instructions */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
-          <div className="flex items-center space-x-3 mb-6">
-            <span className="text-3xl">⚙️</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-              Setup Instructions
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600 text-sm sm:text-base">
-            <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200">
-              <p className="font-medium text-gray-800 mb-2">Environment Setup</p>
-              <p>Add <code className="bg-white px-2 py-1 rounded text-xs font-mono">NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS</code> to your .env.local</p>
+            {/* Action Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {/* Dashboard Card */}
+              <Link href="/dashboard">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105 group">
+                  <div className="text-5xl mb-4">�</div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
+                    View Dashboard
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    Monitor your existing campaigns, view submissions, and track performance
+                  </p>
+                  <div className="space-y-2 text-sm text-gray-500">
+                    <div className="flex items-center justify-center space-x-2">
+                      <span>📈</span>
+                      <span>Track campaign metrics</span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-2">
+                      <span>�</span>
+                      <span>Manage tester submissions</span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-2">
+                      <span>💰</span>
+                      <span>Monitor reward distribution</span>
+                    </div>
+                  </div>
+                  <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg group-hover:shadow-xl">
+                    Open Dashboard
+                  </button>
+                </div>
+              </Link>
+
+              {/* Create Campaign Card */}
+              <Link href="/dashboard/create">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105 group">
+                  <div className="text-5xl mb-4">🚀</div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors">
+                    Create Campaign
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    Submit a new app for testing and set up your reward structure
+                  </p>
+                  <div className="space-y-2 text-sm text-gray-500">
+                    <div className="flex items-center justify-center space-x-2">
+                      <span>📱</span>
+                      <span>Submit your app</span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-2">
+                      <span>✅</span>
+                      <span>Define testing tasks</span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-2">
+                      <span>💎</span>
+                      <span>Set reward amounts</span>
+                    </div>
+                  </div>
+                  <button className="mt-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg group-hover:shadow-xl">
+                    Start New Campaign
+                  </button>
+                </div>
+              </Link>
             </div>
-            <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
-              <p className="font-medium text-gray-800 mb-2">Install MiniKit SDK</p>
-              <code className="bg-white px-2 py-1 rounded text-xs font-mono">npm install @worldcoin/minikit-js</code>
-            </div>
-            <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200">
-              <p className="font-medium text-gray-800 mb-2">Install Ethers.js</p>
-              <code className="bg-white px-2 py-1 rounded text-xs font-mono">npm install ethers</code>
-            </div>
-            <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl border border-orange-200">
-              <p className="font-medium text-gray-800 mb-2">Smart Contract</p>
-              <p>Deploy your contract and update the environment variable</p>
+
+            {/* World ID Verification Section */}
+            <div className="mt-12 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-8 max-w-md mx-auto">
+              <div className="flex items-center justify-center space-x-3 mb-6">
+                <span className="text-3xl">🌍</span>
+                <h3 className="text-xl font-bold text-gray-800">World ID Verification</h3>
+              </div>
+              <p className="text-gray-600 mb-6 text-sm">
+                Verify your humanity with World ID for enhanced platform features.
+              </p>
+              <VerifyWithWorldIDButton walletAddress={walletAddress} />
             </div>
           </div>
-        </div>
+        )}
 
         {/* Footer */}
-        <footer className="mt-16 pt-8 border-t border-gray-200">
+        <footer className="mt-20 pt-8 border-t border-gray-200">
           <div className="text-center text-gray-600">
-            <p className="text-sm">© 2025 Orbital Campaign Platform. Built with Next.js, World ID, and MiniKit.</p>
-            <p className="text-xs mt-2">Decentralized • Secure • Transparent</p>
+            <p className="text-sm">© 2025 Orbital Developer Platform. Built with Next.js, World ID, and MiniKit.</p>
+            <p className="text-xs mt-2">Secure • Decentralized • Developer-Friendly</p>
           </div>
         </footer>
       </div>

@@ -63,12 +63,28 @@ export default function AppDiscoveryPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 sm:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      {/* Navigation */}
+      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">🚀</span>
+              <span className="font-bold text-xl text-gray-900">Orbital - User Mode</span>
+            </div>
+            <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
+              ← Back to Home
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <div className="max-w-7xl mx-auto p-4 sm:p-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">Discover Apps</h1>
+          <div className="text-6xl mb-4">👤</div>
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">Discover Apps to Test</h1>
           <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-            Choose an app to test, complete the tasks, and earn rewards for your feedback.
+            Choose an app to test, complete the tasks, and earn WLD rewards for your feedback.
           </p>
         </div>
 
