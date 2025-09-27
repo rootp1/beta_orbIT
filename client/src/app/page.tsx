@@ -4,72 +4,77 @@ import { useState } from 'react';
 import Link from "next/link";
 import SignInWithWalletButton from "@/components/SignInWithWalletButton";
 import VerifyWithWorldIDButton from "@/components/VerifyWithWorldIDButton";
-import { useAuth } from "@/context/AuthContext"; 
+import { useAuth } from "@/context/AuthContext";
 
 export default function Home() {
   const { walletAddress, setWalletAddress } = useAuth();
   const [selectedMode, setSelectedMode] = useState<'user' | 'developer' | null>(null);
+
   // Show mode selection if no mode is chosen
   if (!selectedMode) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-        {/* Simple Navigation */}
-        <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200">
+      <div className="min-h-screen bg-gray-50">
+        {/* Navigation */}
+        <nav className="bg-white border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-center items-center h-16">
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">🚀</span>
-                <span className="font-bold text-xl text-gray-900">Orbital</span>
+            <div className="flex justify-center items-center h-20">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-indigo-600 rounded-lg"></div>
+                <span className="font-bold text-2xl text-gray-900">Orbital</span>
               </div>
             </div>
           </div>
         </nav>
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           {/* Hero Section */}
-          <div className="text-center mb-16">
-            <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-6">
-              🚀 Welcome to Orbital
+          <div className="text-center mb-20">
+            <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 mb-8 tracking-tight">
+              Welcome to Orbital
             </h1>
-            <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl sm:text-2xl text-gray-600 mb-6 max-w-4xl mx-auto leading-relaxed">
               Decentralized app testing platform with World ID authentication
             </p>
-            <p className="text-lg text-gray-500 mb-12">
+            <p className="text-lg text-gray-500 mb-16 font-medium">
               Choose your experience to get started
             </p>
           </div>
 
           {/* Mode Selection Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
             {/* User Mode */}
             <div 
               onClick={() => setSelectedMode('user')}
-              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200 p-8 hover:shadow-3xl transition-all duration-300 cursor-pointer transform hover:scale-105 group"
+              className="bg-white rounded-2xl shadow-lg border border-gray-200 p-10 hover:shadow-xl transition-all duration-300 cursor-pointer group"
             >
               <div className="text-center">
-                <div className="text-6xl mb-6">👤</div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
-                  User Mode
+                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
+                  Tester Portal
                 </h2>
-                <p className="text-gray-600 mb-6 text-lg leading-relaxed">
-                  Test apps, complete tasks, and earn WLD tokens as a tester in the community
+                <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+                  Test applications, complete verification tasks, and earn WLD tokens as a community tester
                 </p>
-                <div className="space-y-3 text-sm text-gray-500">
-                  <div className="flex items-center justify-center space-x-2">
-                    <span>🎯</span>
-                    <span>Browse available apps to test</span>
+                <div className="space-y-4 text-left mb-10">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                    <span className="text-gray-700">Browse available applications</span>
                   </div>
-                  <div className="flex items-center justify-center space-x-2">
-                    <span>✅</span>
-                    <span>Complete testing tasks</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                    <span className="text-gray-700">Complete testing tasks</span>
                   </div>
-                  <div className="flex items-center justify-center space-x-2">
-                    <span>💰</span>
-                    <span>Earn WLD rewards</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                    <span className="text-gray-700">Earn WLD rewards</span>
                   </div>
                 </div>
-                <button className="mt-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 shadow-lg group-hover:shadow-xl">
-                  Enter as Tester
+                <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-8 rounded-xl transition-colors duration-200">
+                  Enter Tester Portal
                 </button>
               </div>
             </div>
@@ -77,42 +82,46 @@ export default function Home() {
             {/* Developer Mode */}
             <div 
               onClick={() => setSelectedMode('developer')}
-              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200 p-8 hover:shadow-3xl transition-all duration-300 cursor-pointer transform hover:scale-105 group"
+              className="bg-white rounded-2xl shadow-lg border border-gray-200 p-10 hover:shadow-xl transition-all duration-300 cursor-pointer group"
             >
               <div className="text-center">
-                <div className="text-6xl mb-6">👨‍💻</div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors">
-                  Developer Mode
+                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
+                  Developer Portal
                 </h2>
-                <p className="text-gray-600 mb-6 text-lg leading-relaxed">
-                  Submit your apps for testing, create campaigns, and manage your testing programs
+                <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+                  Submit applications for testing, create campaigns, and manage your testing programs
                 </p>
-                <div className="space-y-3 text-sm text-gray-500">
-                  <div className="flex items-center justify-center space-x-2">
-                    <span>🚀</span>
-                    <span>Submit apps for testing</span>
+                <div className="space-y-4 text-left mb-10">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                    <span className="text-gray-700">Submit apps for testing</span>
                   </div>
-                  <div className="flex items-center justify-center space-x-2">
-                    <span>📊</span>
-                    <span>Manage testing campaigns</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                    <span className="text-gray-700">Manage testing campaigns</span>
                   </div>
-                  <div className="flex items-center justify-center space-x-2">
-                    <span>💎</span>
-                    <span>Set rewards & incentives</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                    <span className="text-gray-700">Configure rewards & incentives</span>
                   </div>
                 </div>
-                <button className="mt-8 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 shadow-lg group-hover:shadow-xl">
-                  Enter as Developer
+                <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-8 rounded-xl transition-colors duration-200">
+                  Enter Developer Portal
                 </button>
               </div>
             </div>
           </div>
 
           {/* Footer */}
-          <footer className="mt-20 pt-8 border-t border-gray-200">
-            <div className="text-center text-gray-600">
-              <p className="text-sm">© 2025 Orbital Platform. Built with Next.js, World ID, and MiniKit.</p>
-              <p className="text-xs mt-2">Decentralized • Secure • Transparent</p>
+          <footer className="mt-24 pt-12 border-t border-gray-200">
+            <div className="text-center text-gray-500">
+              <p className="text-sm font-medium">© 2025 Orbital Platform. Built with Next.js, World ID, and MiniKit.</p>
+              <p className="text-xs mt-3 tracking-wide">Decentralized • Secure • Transparent</p>
             </div>
           </footer>
         </div>
@@ -129,105 +138,121 @@ export default function Home() {
 
   // Show Developer Mode with authentication flow
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Developer Navigation */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200">
+      <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <span className="text-2xl">🚀</span>
-              <span className="font-bold text-xl text-gray-900">Orbital - Developer Mode</span>
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-indigo-600 rounded-lg"></div>
+              <span className="font-bold text-xl text-gray-900">Orbital Developer Portal</span>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-6">
               {walletAddress ? (
                 <>
-                  <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
+                  <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
                     Dashboard
                   </Link>
-                  <Link href="/dashboard/create" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">
+                  <Link href="/dashboard/create" className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition-colors text-sm font-semibold">
                     Create Campaign
                   </Link>
                 </>
               ) : null}
               <button 
                 onClick={() => setSelectedMode(null)}
-                className="text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-gray-500 hover:text-gray-700 transition-colors font-medium"
               >
-                ← Back
+                ← Back to Home
               </button>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {!walletAddress ? (
           // Authentication Step
-          <div className="text-center mb-12">
-            <div className="text-8xl mb-6">👨‍💻</div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+          <div className="text-center mb-16">
+            <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
+              <svg className="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-8 tracking-tight">
               Developer Authentication
             </h1>
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-              Connect your wallet to access the developer dashboard and start creating testing campaigns for your apps.
+            <p className="text-xl text-gray-600 mb-16 max-w-2xl mx-auto leading-relaxed">
+              Connect your wallet to access the developer dashboard and start creating testing campaigns for your applications.
             </p>
             
             {/* Authentication Card */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200 p-8 max-w-md mx-auto">
-              <div className="flex items-center justify-center space-x-3 mb-6">
-                <span className="text-3xl">🌍</span>
-                <h2 className="text-2xl font-bold text-gray-800">Connect Wallet</h2>
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-10 max-w-lg mx-auto">
+              <div className="flex items-center justify-center space-x-4 mb-8">
+                <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                  <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900">Connect Wallet</h2>
               </div>
-              <p className="text-gray-600 mb-8 text-sm leading-relaxed">
-                Sign in securely using your wallet to access developer features.
+              <p className="text-gray-600 mb-10 text-lg leading-relaxed">
+                Authenticate securely using your wallet to access all developer features and campaign management tools.
               </p>
               <SignInWithWalletButton onSignInSuccess={setWalletAddress} />
             </div>
           </div>
         ) : (
           // Authenticated Developer Dashboard
-          <div className="text-center mb-12">
-            <div className="text-8xl mb-6">✅</div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-              Welcome, Developer!
+          <div className="text-center mb-16">
+            <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
+              <svg className="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-8 tracking-tight">
+              Welcome, Developer
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl text-gray-600 mb-12 leading-relaxed">
               Your wallet is connected. Choose what you'd like to do:
             </p>
             
             {/* Connected Wallet Display */}
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 rounded-xl p-4 mb-8 max-w-md mx-auto">
-              <p className="text-sm text-green-600 mb-2">Connected Wallet</p>
-              <p className="font-mono text-xs break-all font-medium">{walletAddress}</p>
+            <div className="bg-indigo-50 border border-indigo-200 text-indigo-800 rounded-xl p-6 mb-16 max-w-lg mx-auto">
+              <p className="text-sm text-indigo-600 mb-2 font-semibold">Connected Wallet</p>
+              <p className="font-mono text-sm break-all font-medium">{walletAddress}</p>
             </div>
 
             {/* Action Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
               {/* Dashboard Card */}
               <Link href="/dashboard">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105 group">
-                  <div className="text-5xl mb-4">�</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-10 hover:shadow-xl transition-all duration-300 cursor-pointer group">
+                  <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
                     View Dashboard
                   </h3>
-                  <p className="text-gray-600 mb-6">
-                    Monitor your existing campaigns, view submissions, and track performance
+                  <p className="text-gray-600 mb-8 leading-relaxed">
+                    Monitor your existing campaigns, view submissions, and track performance metrics
                   </p>
-                  <div className="space-y-2 text-sm text-gray-500">
-                    <div className="flex items-center justify-center space-x-2">
-                      <span>📈</span>
-                      <span>Track campaign metrics</span>
+                  <div className="space-y-4 text-left mb-8">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                      <span className="text-gray-700">Track campaign metrics</span>
                     </div>
-                    <div className="flex items-center justify-center space-x-2">
-                      <span>�</span>
-                      <span>Manage tester submissions</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                      <span className="text-gray-700">Manage tester submissions</span>
                     </div>
-                    <div className="flex items-center justify-center space-x-2">
-                      <span>💰</span>
-                      <span>Monitor reward distribution</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                      <span className="text-gray-700">Monitor reward distribution</span>
                     </div>
                   </div>
-                  <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg group-hover:shadow-xl">
+                  <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-200">
                     Open Dashboard
                   </button>
                 </div>
@@ -235,29 +260,33 @@ export default function Home() {
 
               {/* Create Campaign Card */}
               <Link href="/dashboard/create">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105 group">
-                  <div className="text-5xl mb-4">🚀</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors">
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-10 hover:shadow-xl transition-all duration-300 cursor-pointer group">
+                  <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
                     Create Campaign
                   </h3>
-                  <p className="text-gray-600 mb-6">
-                    Submit a new app for testing and set up your reward structure
+                  <p className="text-gray-600 mb-8 leading-relaxed">
+                    Submit a new application for testing and configure your reward structure
                   </p>
-                  <div className="space-y-2 text-sm text-gray-500">
-                    <div className="flex items-center justify-center space-x-2">
-                      <span>📱</span>
-                      <span>Submit your app</span>
+                  <div className="space-y-4 text-left mb-8">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                      <span className="text-gray-700">Submit your application</span>
                     </div>
-                    <div className="flex items-center justify-center space-x-2">
-                      <span>✅</span>
-                      <span>Define testing tasks</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                      <span className="text-gray-700">Define testing tasks</span>
                     </div>
-                    <div className="flex items-center justify-center space-x-2">
-                      <span>💎</span>
-                      <span>Set reward amounts</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
+                      <span className="text-gray-700">Configure reward amounts</span>
                     </div>
                   </div>
-                  <button className="mt-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg group-hover:shadow-xl">
+                  <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-200">
                     Start New Campaign
                   </button>
                 </div>
@@ -265,13 +294,17 @@ export default function Home() {
             </div>
 
             {/* World ID Verification Section */}
-            <div className="mt-12 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-8 max-w-md mx-auto">
-              <div className="flex items-center justify-center space-x-3 mb-6">
-                <span className="text-3xl">🌍</span>
-                <h3 className="text-xl font-bold text-gray-800">World ID Verification</h3>
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 max-w-lg mx-auto">
+              <div className="flex items-center justify-center space-x-4 mb-6">
+                <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                  <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">World ID Verification</h3>
               </div>
-              <p className="text-gray-600 mb-6 text-sm">
-                Verify your humanity with World ID for enhanced platform features.
+              <p className="text-gray-600 mb-8 leading-relaxed">
+                Verify your humanity with World ID for enhanced platform features and increased trust.
               </p>
               <VerifyWithWorldIDButton walletAddress={walletAddress} />
             </div>
@@ -280,9 +313,9 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="mt-20 pt-8 border-t border-gray-200">
-          <div className="text-center text-gray-600">
-            <p className="text-sm">© 2025 Orbital Developer Platform. Built with Next.js, World ID, and MiniKit.</p>
-            <p className="text-xs mt-2">Secure • Decentralized • Developer-Friendly</p>
+          <div className="text-center text-gray-500">
+            <p className="text-sm font-medium">© 2025 Orbital Developer Platform. Built with Next.js, World ID, and MiniKit.</p>
+            <p className="text-xs mt-2 tracking-wide">Secure • Decentralized • Developer-Friendly</p>
           </div>
         </footer>
       </div>

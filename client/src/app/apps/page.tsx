@@ -12,23 +12,23 @@ type App = {
 };
 
 const AppCard = ({ app }: { app: App }) => (
-  <div className="bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col">
-    <div className="p-6">
-      <div className="flex items-center space-x-4 mb-4">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xl">
-          {app.name.charAt(0)}
+  <div className="bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col group">
+    <div className="p-8">
+      <div className="flex items-center space-x-4 mb-6">
+        <div className="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center">
+          <span className="text-indigo-600 font-bold text-xl">{app.name.charAt(0)}</span>
         </div>
-        <h3 className="font-bold text-xl text-gray-900">{app.name}</h3>
+        <h3 className="font-bold text-xl text-gray-900 group-hover:text-indigo-600 transition-colors">{app.name}</h3>
       </div>
-      <p className="text-gray-600 text-sm mb-4 h-20 overflow-hidden">{app.description}</p>
+      <p className="text-gray-600 text-sm mb-6 h-20 overflow-hidden leading-relaxed">{app.description}</p>
     </div>
-    <div className="border-t border-gray-200 mt-auto p-6 bg-gray-50 rounded-b-2xl flex justify-between items-center">
+    <div className="border-t border-gray-200 mt-auto p-8 bg-gray-50 rounded-b-2xl flex justify-between items-center">
       <div>
-        <p className="text-xs text-gray-500">Reward</p>
-        <p className="font-bold text-green-600">{app.reward_per_tester} WLD</p>
+        <p className="text-xs text-gray-500 font-medium mb-1">Reward</p>
+        <p className="font-bold text-indigo-600 text-lg">{app.reward_per_tester} WLD</p>
       </div>
       <Link href={`/apps/${app.id}`}>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-all text-sm">
+        <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm">
           Start Testing
         </button>
       </Link>
@@ -65,14 +65,14 @@ export default function AppDiscoveryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200">
+      <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <span className="text-2xl">🚀</span>
-              <span className="font-bold text-xl text-gray-900">Orbital - User Mode</span>
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-indigo-600 rounded-lg"></div>
+              <span className="font-bold text-xl text-gray-900">Orbital Tester Portal</span>
             </div>
-            <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="/" className="text-gray-500 hover:text-gray-700 transition-colors font-medium">
               ← Back to Home
             </Link>
           </div>
@@ -80,11 +80,15 @@ export default function AppDiscoveryPage() {
       </nav>
 
       <div className="max-w-7xl mx-auto p-4 sm:p-8">
-        <div className="text-center mb-12">
-          <div className="text-6xl mb-4">👤</div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">Discover Apps to Test</h1>
-          <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-            Choose an app to test, complete the tasks, and earn WLD rewards for your feedback.
+        <div className="text-center mb-16">
+          <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
+            <svg className="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-8 tracking-tight">Discover Apps to Test</h1>
+          <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto leading-relaxed">
+            Choose an application to test, complete the verification tasks, and earn WLD rewards for your valuable feedback.
           </p>
         </div>
 

@@ -113,9 +113,9 @@ export default function CreateAppPage() {
                 &larr; Back to Home
             </Link>
         </nav>
-        <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-lg border border-gray-200">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Submit Your App</h1>
-            <p className="text-gray-600 mb-8">List your app on the Proving Ground for community testing.</p>
+        <div className="bg-white p-8 sm:p-12 rounded-2xl shadow-lg border border-gray-200">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">Submit Your Application</h1>
+            <p className="text-gray-600 mb-12 text-lg">List your application on the platform for community testing and feedback.</p>
 
             <form onSubmit={handleSubmit} className="space-y-8">
                 {/* App Details Section */}
@@ -301,7 +301,7 @@ export default function CreateAppPage() {
                       disabled={isLoading || !walletAddress} // 👈 5. Disable button if not logged in
                       className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400"
                     >
-                      {isLoading ? 'Submitting...' : 'Submit App'}
+                      {isLoading ? 'Submitting Application...' : 'Submit Application'}
                     </button>
                     {!walletAddress && (
                       <p className="text-center text-red-600 text-sm mt-2">Please connect your wallet to submit an app.</p>

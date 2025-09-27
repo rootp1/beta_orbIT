@@ -82,19 +82,19 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-12">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Developer Dashboard</h1>
-            <p className="text-gray-600 mt-1">Manage your submitted apps and view their status.</p>
+            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">Developer Dashboard</h1>
+            <p className="text-gray-600 mt-2 text-lg">Manage your submitted applications and view their status.</p>
           </div>
           <Link href="/dashboard/create">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-all">
-              + Submit New App
+            <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
+              Submit New App
             </button>
           </Link>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+        <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
           {isLoading ? (
             <div className="text-center py-10">
               <p>Loading your apps...</p>
@@ -104,7 +104,7 @@ export default function DashboardPage() {
               <h3 className="text-xl font-medium text-gray-800">No Apps Found</h3>
               <p className="text-gray-500 mt-2 mb-4">You haven't submitted any apps for testing yet.</p>
               <Link href="/dashboard/create">
-                <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg">
+                <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
                   Submit Your First App
                 </button>
               </Link>
