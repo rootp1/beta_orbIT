@@ -13,11 +13,24 @@ export const metadata: Metadata = {
   keywords: "blockchain, campaigns, World ID, decentralized, funding, crypto",
   authors: [{ name: "Orbital Team" }],
   robots: "index, follow",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     title: "Orbital - Decentralized Campaign Platform",
     description: "Launch and manage decentralized campaigns with World ID authentication",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Orbital Logo",
+      },
+    ],
   },
 };
 

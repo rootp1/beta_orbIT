@@ -31,6 +31,13 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           {/* Hero Section */}
           <div className="text-center mb-20">
+            <div className="flex justify-center mb-8">
+              <img 
+                src="/logo.png" 
+                alt="Orbital Logo" 
+                className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl shadow-lg"
+              />
+            </div>
             <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 dark:text-white mb-8 tracking-tight">
               Welcome to Orbital
             </h1>

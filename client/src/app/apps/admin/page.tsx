@@ -94,8 +94,6 @@ export default function AdminPage() {
     setLoading(true)
     setMessage('')
     
-    const supabase = createClient()
-    
     try {
       // Delete all tasks first (foreign key constraint)
       await supabase.from('tasks').delete().neq('id', 0)
@@ -116,9 +114,16 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Panel</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">Manage test data for development</p>
+          <div className="flex items-center space-x-4">
+            <img 
+              src="/logo.png" 
+              alt="Orbital Logo" 
+              className="w-12 h-12 rounded-xl"
+            />
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Panel</h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">Manage test data for development</p>
+            </div>
           </div>
           <ThemeToggle />
         </div>

@@ -34,6 +34,11 @@ export default function AppDetailPage() {
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set())
   const [verificationKeys, setVerificationKeys] = useState<{[key: string]: string}>({})
   const [submitting, setSubmitting] = useState<string | null>(null)
+  const [showIframe, setShowIframe] = useState(false)
+  const [iframeUrl, setIframeUrl] = useState('')
+  const [fullscreenIframe, setFullscreenIframe] = useState(false)
+  const [iframeError, setIframeError] = useState(false)
+  const [iframeLoading, setIframeLoading] = useState(true)
 
   useEffect(() => {
     if (id) {
@@ -131,7 +136,11 @@ export default function AppDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-indigo-600 dark:bg-blue-600 rounded-lg"></div>
+              <img 
+                src="/logo.png" 
+                alt="Orbital Logo" 
+                className="w-8 h-8 rounded-lg"
+              />
               <span className="font-bold text-xl text-gray-900 dark:text-white">App Testing</span>
             </div>
             <div className="flex items-center space-x-4">
@@ -164,18 +173,175 @@ export default function AppDetailPage() {
             </div>
           </div>
           
-          <a 
-            href={app.deployed_url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
-          >
-            Open App
-            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-          </a>
+          <div className="flex gap-3">
+            <button 
+              onClick={() => {
+                setIframeUrl(app.deployed_url)
+                setShowIframe(true)
+                setIframeError(false)
+                setIframeLoading(true)
+              }}
+              className="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+            >
+              Test App (Sandbox)
+              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+            <a 
+              href={app.deployed_url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+            >
+              Open in New Tab
+              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </div>
         </div>
+
+        {/* App Preview Section */}
+        {showIframe && (
+          <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 mb-8 ${fullscreenIframe ? 'fixed inset-4 z-50 overflow-auto' : ''}`}>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">App Preview (Sandboxed)</h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setFullscreenIframe(!fullscreenIframe)}
+                  className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                >
+                  {fullscreenIframe ? 'Exit Fullscreen' : 'Fullscreen'}
+                </button>
+                <button
+                  onClick={() => {
+                    setShowIframe(false)
+                    setFullscreenIframe(false)
+                  }}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                >
+                  Close Preview
+                </button>
+              </div>
+            </div>
+            <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-4">
+              <div className="bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 overflow-hidden">
+                <div className="bg-gray-50 dark:bg-gray-700 px-4 py-2 border-b border-gray-200 dark:border-gray-600 flex items-center gap-2">
+                  <div className="flex gap-1">
+                    <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                    <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                    <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                  </div>
+                  <div className="flex-1 bg-white dark:bg-gray-600 rounded px-3 py-1 text-sm text-gray-600 dark:text-gray-300 font-mono">
+                    {iframeUrl}
+                  </div>
+                </div>
+                <div className="relative">
+                  {iframeLoading && (
+                    <div className={`absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 ${fullscreenIframe ? 'h-[calc(100vh-12rem)]' : 'h-96 md:h-[32rem] lg:h-[40rem]'}`}>
+                      <div className="text-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-2"></div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Loading app...</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {iframeError ? (
+                    <div className={`flex flex-col items-center justify-center bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-lg ${fullscreenIframe ? 'h-[calc(100vh-12rem)]' : 'h-96 md:h-[32rem] lg:h-[40rem]'}`}>
+                      <div className="text-center p-8">
+                        <svg className="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                        <h3 className="text-lg font-semibold text-red-800 dark:text-red-300 mb-2">Unable to Load in Sandbox</h3>
+                        <p className="text-sm text-red-700 dark:text-red-400 mb-4">
+                          This website blocks iframe embedding for security reasons.
+                        </p>
+                        <div className="space-y-2">
+                          <a 
+                            href={iframeUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                          >
+                            Open in New Tab
+                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                          <button
+                            onClick={() => {
+                              setIframeError(false)
+                              setIframeLoading(true)
+                              // Force reload iframe
+                              const iframe = document.querySelector('iframe[title*="App Preview"]') as HTMLIFrameElement
+                              if (iframe) {
+                                iframe.src = iframe.src
+                              }
+                            }}
+                            className="ml-2 inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                          >
+                            Try Again
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <iframe
+                      src={iframeUrl}
+                      className={`w-full border-0 bg-white ${fullscreenIframe ? 'h-[calc(100vh-12rem)]' : 'h-96 md:h-[32rem] lg:h-[40rem]'}`}
+                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation allow-downloads"
+                      loading="lazy"
+                      title={`${app.name} - App Preview`}
+                      onLoad={() => {
+                        setIframeLoading(false)
+                        // Check if iframe actually loaded content
+                        setTimeout(() => {
+                          try {
+                            const iframe = document.querySelector('iframe[title*="App Preview"]') as HTMLIFrameElement
+                            if (iframe && iframe.contentWindow) {
+                              // Try to access iframe content to detect blocking
+                              iframe.contentWindow.location.href
+                            }
+                          } catch (e) {
+                            // If we can't access, it might be blocked
+                            console.log('Iframe access blocked, but content may have loaded')
+                          }
+                        }, 2000)
+                      }}
+                      onError={() => {
+                        setIframeLoading(false)
+                        setIframeError(true)
+                      }}
+                    />
+                  )}
+                  
+                  {!iframeError && !iframeLoading && (
+                    <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+                      Sandboxed
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <p className="text-sm font-medium text-blue-800 dark:text-blue-300">Sandbox Information</p>
+                  <div className="text-sm text-blue-700 dark:text-blue-400 mt-1 space-y-1">
+                    <p>• Apps run in a secure sandbox for your protection</p>
+                    <p>• Some sites (YouTube, Google, etc.) may block iframe embedding</p>
+                    <p>• If blocked, use "Open in New Tab" for full functionality</p>
+                    <p>• Your data remains secure while testing</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Tasks Section */}
         <div className="space-y-6">
@@ -210,6 +376,22 @@ export default function AppDetailPage() {
 
                 {!completedTasks.has(task.id) && (
                   <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Complete this task to earn {task.per_task_reward} WLD</p>
+                      {!showIframe && (
+                        <button
+                          onClick={() => {
+                            setIframeUrl(app.deployed_url)
+                            setShowIframe(true)
+                            setIframeError(false)
+                            setIframeLoading(true)
+                          }}
+                          className="text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-lg transition-colors"
+                        >
+                          🔍 Test App
+                        </button>
+                      )}
+                    </div>
                     <div className="flex items-center gap-3">
                       <input
                         type="text"

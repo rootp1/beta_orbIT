@@ -12,9 +12,11 @@ type App = {
   id: string;
   name: string;
   description?: string;
+  deployed_url?: string;
+  logo_url?: string;
   status: 'DRAFT' | 'ACTIVE' | 'COMPLETED';
-  max_testers: number;
-  reward_per_tester: number;
+  max_testers?: number;
+  reward_per_tester?: number;
   created_at: string;
 };
 
@@ -23,6 +25,31 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { walletAddress } = useAuth();
   const router = useRouter();
+
+  const publishApp = async (appId: string) => {
+    try {
+      const { error } = await supabase
+        .from('apps')
+        .update({ status: 'ACTIVE' })
+        .eq('id', appId);
+
+      if (error) throw error;
+
+      // Refresh the apps list
+      const { data } = await supabase
+        .from('apps')
+        .select('id, name, description, deployed_url, logo_url, status, max_testers, reward_per_tester, created_at')
+        .eq('owner_id', walletAddress)
+        .order('created_at', { ascending: false });
+
+      setApps(data || []);
+      alert('App published successfully! It will now appear in the tester portal.');
+
+    } catch (error: any) {
+      console.error('Error publishing app:', error);
+      alert(`Error: ${error.message}`);
+    }
+  };
 
   // If user is not logged in, don't show the dashboard content
   if (!walletAddress) {
@@ -52,7 +79,7 @@ export default function DashboardPage() {
         // Fetch only the apps that belong to the current user
         const { data, error } = await supabase
           .from('apps')
-          .select('id, name, description, status, max_testers, reward_per_tester, created_at')
+          .select('id, name, description, deployed_url, logo_url, status, max_testers, reward_per_tester, created_at')
           .eq('owner_id', walletAddress) // The key filtering logic
           .order('created_at', { ascending: false });
 
@@ -84,9 +111,16 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-12">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">Developer Dashboard</h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-2 text-lg">Manage your submitted applications and view their status.</p>
+          <div className="flex items-center space-x-4">
+            <img 
+              src="/logo.png" 
+              alt="Orbital Logo" 
+              className="w-16 h-16 rounded-xl"
+            />
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">Developer Dashboard</h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-2 text-lg">Manage your submitted applications and view their status.</p>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             <ThemeToggle />
@@ -125,22 +159,37 @@ export default function DashboardPage() {
                     <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500 mt-1">
                       <AppStatusBadge status={app.status} />
                       <span>•</span>
-                      <span>Max Testers: {app.max_testers}</span>
+                      <span>Max Testers: {app.max_testers || 'Not set'}</span>
                       <span>•</span>
-                      <span>Reward: {app.reward_per_tester} WLD</span>
+                      <span>Reward: {app.reward_per_tester || 0} WLD</span>
                       <span>•</span>
                       <span>Created: {new Date(app.created_at).toLocaleDateString()}</span>
                     </div>
                   </div>
                   <div className="flex space-x-2 w-full sm:w-auto">
                     {app.status === 'DRAFT' && (
-                      <button className="w-full sm:w-auto text-sm bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg">
-                        Fund
+                      <button 
+                        onClick={() => publishApp(app.id)}
+                        className="w-full sm:w-auto text-sm bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                      >
+                        Publish App
                       </button>
                     )}
-                    <button className="w-full sm:w-auto text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg">
-                      View Submissions
-                    </button>
+                    {app.deployed_url && (
+                      <a 
+                        href={app.deployed_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto text-sm bg-indigo-600 hover:bg-indigo-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-center"
+                      >
+                        View App
+                      </a>
+                    )}
+                    <Link href={`/apps/${app.id}`}>
+                      <button className="w-full sm:w-auto text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                        View Details
+                      </button>
+                    </Link>
                   </div>
                 </div>
               ))}
