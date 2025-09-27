@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/utils/supabaseClient'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
-import ThemeToggle from '@/components/ThemeToggle'
 
 type Task = {
   description: string;
@@ -106,17 +105,16 @@ export default function CreateAppPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-8">
+    <div className="min-h-screen bg-gray-900 p-4 sm:p-8">
       <div className="max-w-4xl mx-auto">
-        <nav className="mb-8 flex justify-between items-center">
-            <Link href="/" className="text-indigo-600 dark:text-blue-400 hover:underline">
+        <nav className="mb-8">
+            <Link href="/" className="text-blue-400 hover:underline">
                 &larr; Back to Home
             </Link>
-            <ThemeToggle />
         </nav>
-        <div className="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">Submit Your Application</h1>
-            <p className="text-gray-600 dark:text-gray-300 mb-12 text-lg">List your application on the platform for community testing and feedback.</p>
+        <div className="bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-lg border border-gray-700">
+            <h1 className="text-4xl font-bold text-white mb-4 tracking-tight">Submit Your Application</h1>
+            <p className="text-gray-300 mb-12 text-lg">List your application on the platform for community testing and feedback.</p>
 
             <form onSubmit={handleSubmit} className="space-y-8">
                 {/* App Details Section */}

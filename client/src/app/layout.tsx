@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { MiniKitProvider } from "@worldcoin/minikit-js/minikit-provider";
-import { AuthProvider } from "@/context/AuthContext"; 
+import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext"; 
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,15 +36,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
-          <MiniKitProvider 
-            props={{
-              appId: process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID || ""
-            }}
-          >
-            {children}
-          </MiniKitProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <MiniKitProvider 
+              props={{
+                appId: process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID || ""
+              }}
+            >
+              {children}
+            </MiniKitProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

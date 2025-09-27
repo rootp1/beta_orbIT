@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/utils/supabaseClient'
 import Link from 'next/link'
-import { useAuth } from '@/context/AuthContext'
-import ThemeToggle from '@/components/ThemeToggle'
+import { useAuth } from '@/context/AuthContext' // 👈 1. Import useAuth
 
 type Task = {
   description: string;
@@ -16,7 +15,7 @@ type Task = {
 export default function CreateAppPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { walletAddress } = useAuth();
+  const { walletAddress } = useAuth(); // 👈 2. Get the live wallet address from global state
 
   const [appName, setAppName] = useState('');
   const [appDescription, setAppDescription] = useState('');
@@ -60,6 +59,7 @@ export default function CreateAppPage() {
     e.preventDefault();
     setIsLoading(true);
 
+    // 👇 3. Check if the user is logged in before submitting
     if (!walletAddress) {
       alert("Please connect your wallet before submitting an app.");
       setIsLoading(false);
@@ -67,18 +67,18 @@ export default function CreateAppPage() {
     }
 
     try {
-      const totalReward = calculateTotalReward();
-      
+      // This is now redundant if your SIWE logic already does this, but it's safe to keep.
+      await supabase.from('users').upsert({ id: walletAddress });
+
       const { data: appData, error: appError } = await supabase
         .from('apps')
         .insert({
           name: appName,
           description: appDescription,
-          url: appUrl,
+          deployed_url: appUrl,
           max_testers: maxTesters,
-          reward_per_tester: totalReward,
-          owner_id: walletAddress,
-          status: 'DRAFT'
+          reward_per_tester: calculateTotalReward(),
+          owner_id: walletAddress, // 👈 4. Use the real wallet address
         })
         .select()
         .single();
@@ -106,17 +106,16 @@ export default function CreateAppPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-8">
+    <div className="min-h-screen bg-gray-900 p-4 sm:p-8">
       <div className="max-w-4xl mx-auto">
-        <nav className="mb-8 flex justify-between items-center">
-            <Link href="/" className="text-indigo-600 dark:text-blue-400 hover:underline">
+        <nav className="mb-8">
+            <Link href="/" className="text-blue-400 hover:underline">
                 &larr; Back to Home
             </Link>
-            <ThemeToggle />
         </nav>
-        <div className="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">Submit Your Application</h1>
-            <p className="text-gray-600 dark:text-gray-300 mb-12 text-lg">List your application on the platform for community testing and feedback.</p>
+        <div className="bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-lg border border-gray-700">
+            <h1 className="text-4xl font-bold text-white mb-4 tracking-tight">Submit Your Application</h1>
+            <p className="text-gray-300 mb-12 text-lg">List your application on the platform for community testing and feedback.</p>
 
             <form onSubmit={handleSubmit} className="space-y-8">
                 {/* App Details Section */}
@@ -166,50 +165,56 @@ export default function CreateAppPage() {
                             required
                             value={appUrl}
                             onChange={(e) => setAppUrl(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="https://your-app.com"
                         />
                     </div>
 
-                    {/* Max Testers */}
-                    <div>
+                    {/* Max Testers and Calculated Total Reward */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label htmlFor="maxTesters" className="block text-sm font-medium text-gray-300 mb-1">
-                                Maximum Number of Testers
+                            <label htmlFor="maxTesters" className="block text-sm font-medium text-gray-700 mb-1">
+                                Max Testers *
                             </label>
                             <input
                                 type="number"
                                 id="maxTesters"
-                                min={1}
-                                max={100}
+                                min="1"
+                                max="100"
+                                required
                                 value={maxTesters}
-                                onChange={(e) => setMaxTesters(parseInt(e.target.value))}
-                                className="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                onChange={(e) => setMaxTesters(parseInt(e.target.value) || 1)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
+                            <p className="text-xs text-gray-500 mt-1">Maximum number of testers (1-100)</p>
                         </div>
-                        <div className="mt-4">
-                            <label className="block text-sm font-medium text-gray-300 mb-1">
-                                Total Reward per Tester
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Total Reward per Tester (WLD)
                             </label>
-                            <div className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-300">
-                                {calculateTotalReward()} WLD (calculated from task rewards below)
+                            <div className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-700">
+                                {calculateTotalReward().toFixed(4)} WLD
                             </div>
+                            <p className="text-xs text-gray-500 mt-1">Automatically calculated from task rewards</p>
                         </div>
                     </div>
                 </div>
 
-                {/* Testing Tasks Section */}
+                {/* Tasks Section */}
                 <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-white border-b border-gray-600 pb-2">2. Testing Tasks</h2>
+                    <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">2. Testing Tasks</h2>
                     {tasks.map((task, index) => (
-                        <div key={index} className="space-y-4 p-4 bg-gray-700 rounded-lg border border-gray-600">
-                            <div className="flex justify-between items-center">
-                                <h3 className="font-medium text-white">Task {index + 1}</h3>
+                        <div key={index} className="p-4 border border-gray-200 rounded-lg space-y-3 bg-gray-50">
+                            <div className="flex justify-between items-center mb-2">
+                                <h3 className="font-medium text-gray-700">Task {index + 1}</h3>
                                 {tasks.length > 1 && (
                                     <button
                                         type="button"
-                                        onClick={() => setTasks(tasks.filter((_, i) => i !== index))}
-                                        className="text-red-400 hover:text-red-300 text-sm"
+                                        onClick={() => {
+                                            const updatedTasks = tasks.filter((_, i) => i !== index);
+                                            setTasks(updatedTasks);
+                                        }}
+                                        className="text-red-600 hover:text-red-800 text-sm"
                                     >
                                         Remove
                                     </button>
@@ -218,7 +223,7 @@ export default function CreateAppPage() {
                             
                             {/* Task Description */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Task Description *
                                 </label>
                                 <textarea
@@ -226,14 +231,14 @@ export default function CreateAppPage() {
                                     rows={2}
                                     value={task.description}
                                     onChange={(e) => handleTaskChange(index, 'description', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-600 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="What should the tester do for this task?"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Describe what the tester should do for this task"
                                 />
                             </div>
 
                             {/* Verification Key */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Verification Key *
                                 </label>
                                 <input
@@ -241,60 +246,66 @@ export default function CreateAppPage() {
                                     required
                                     value={task.verification_key}
                                     onChange={(e) => handleTaskChange(index, 'verification_key', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-600 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Secret key or code that proves task completion"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter the verification key/code testers should find"
                                 />
+                                <p className="text-xs text-gray-500 mt-1">This is what testers need to submit to prove task completion</p>
                             </div>
 
                             {/* Per Task Reward */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">
-                                    Reward for this Task (WLD) *
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Task Reward (WLD) *
                                 </label>
                                 <input
                                     type="number"
-                                    required
+                                    min="0"
                                     step="0.01"
-                                    min={0}
+                                    required
                                     value={task.per_task_reward}
                                     onChange={(e) => handleTaskChange(index, 'per_task_reward', parseFloat(e.target.value) || 0)}
-                                    className="w-full px-3 py-2 border border-gray-600 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="0.00"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
+                                <p className="text-xs text-gray-500 mt-1">WLD tokens earned for completing this specific task</p>
                             </div>
                         </div>
                     ))}
-                    <button type="button" onClick={handleAddTask} className="w-full text-sm font-medium text-blue-400 border-2 border-dashed border-gray-600 rounded-lg py-2 hover:bg-gray-700">
+                    <button type="button" onClick={handleAddTask} className="w-full text-sm font-medium text-blue-600 border-2 border-dashed border-gray-300 rounded-lg py-2 hover:bg-blue-50">
                         + Add Another Task
                     </button>
                 </div>
 
-                {/* Summary */}
-                <div className="bg-gray-700 p-6 rounded-lg border border-gray-600">
-                    <h3 className="font-medium text-white mb-4">Campaign Summary</h3>
-                    <div className="space-y-2 text-sm">
-                        <p className="text-gray-300">App: <span className="text-white font-medium">{appName || 'Not specified'}</span></p>
-                        <p className="text-gray-300">Total Tasks: <span className="text-white font-medium">{tasks.length}</span></p>
-                        <p className="text-gray-300">Max Testers: <span className="text-white font-medium">{maxTesters}</span></p>
-                        <p className="text-gray-300">Reward per Tester: <span className="text-white font-medium">{calculateTotalReward()} WLD</span></p>
-                        <p className="text-gray-300">Total Campaign Budget: <span className="text-white font-medium">{calculateTotalReward() * maxTesters} WLD</span></p>
+                {/* Campaign Summary */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-blue-900 mb-3">Campaign Summary</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <p className="text-blue-700 font-medium">Tasks</p>
+                            <p className="text-blue-900 font-bold">{tasks.length}</p>
+                        </div>
+                        <div>
+                            <p className="text-blue-700 font-medium">Reward per Tester</p>
+                            <p className="text-blue-900 font-bold">{calculateTotalReward().toFixed(4)} WLD</p>
+                        </div>
+                        <div>
+                            <p className="text-blue-700 font-medium">Total Campaign Cost</p>
+                            <p className="text-blue-900 font-bold">{(calculateTotalReward() * maxTesters).toFixed(4)} WLD</p>
+                        </div>
                     </div>
                 </div>
 
                 {/* Submit Button */}
-                <div className="flex space-x-4">
-                    <Link href="/dashboard">
-                        <button type="button" className="flex-1 bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-                            Cancel
-                        </button>
-                    </Link>
-                    <button 
-                        type="submit" 
-                        disabled={isLoading}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                <div className="pt-5">
+                    <button
+                      type="submit"
+                      disabled={isLoading || !walletAddress} // 👈 5. Disable button if not logged in
+                      className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400"
                     >
-                        {isLoading ? 'Submitting...' : 'Submit App for Testing'}
+                      {isLoading ? 'Submitting Application...' : 'Submit Application'}
                     </button>
+                    {!walletAddress && (
+                      <p className="text-center text-red-600 text-sm mt-2">Please connect your wallet to submit an app.</p>
+                    )}
                 </div>
             </form>
         </div>
