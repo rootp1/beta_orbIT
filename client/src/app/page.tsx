@@ -6,6 +6,7 @@ import SignInWithWalletButton from "@/components/SignInWithWalletButton";
 import VerifyWithWorldIDButton from "@/components/VerifyWithWorldIDButton";
 import { useAuth } from "@/context/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
+import HumanBadge from "@/components/HumanBadge";
 
 export default function Home() {
   const { walletAddress, isAuthenticated, isLoading, login, logout } = useAuth();
@@ -56,6 +57,7 @@ export default function Home() {
                     </button>
                   </div>
                 )}
+                <HumanBadge />
                 <ThemeToggle />
               </div>
             </div>

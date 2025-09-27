@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/utils/supabaseClient'
 import { useAuth } from '@/context/AuthContext'
 import ThemeToggle from '@/components/ThemeToggle'
+import HumanBadge from '@/components/HumanBadge'
 
 // A TypeScript type for our app data
 type App = {
@@ -147,6 +148,7 @@ export default function DashboardPage() {
             >
               Disconnect
             </button>
+            <HumanBadge />
             <ThemeToggle />
             <Link href="/dashboard/create">
               <button className="bg-indigo-600 hover:bg-indigo-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors">

@@ -13,8 +13,8 @@ export default function SignInWithWalletButton({ onSignInSuccess }: SignInProps)
   const handleSignIn = async () => {
     setIsLoading(true);
     try {
-      if (!MiniKit.isInstalled()) {
-        throw new Error('Please open this in the World App.');
+      if (typeof (MiniKit as any)?.commandsAsync?.walletAuth !== 'function') {
+        throw new Error('World App not detected. Please open this in the World App.');
       }
 
       const nonceResponse = await fetch('/api/nonce');
@@ -27,7 +27,8 @@ export default function SignInWithWalletButton({ onSignInSuccess }: SignInProps)
       });
 
       if (finalPayload.status === 'error') {
-        throw new Error(finalPayload.detail || 'Wallet authentication failed.');
+        const detail = (finalPayload as any)?.detail || (finalPayload as any)?.message
+        throw new Error(detail || 'Wallet authentication failed.');
       }
 
       const verifyResponse = await fetch('/api/complete-siwe', {

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/utils/supabaseClient'
 import ThemeToggle from '@/components/ThemeToggle'
+import HumanBadge from '@/components/HumanBadge'
 
 export default function AdminPage() {
   const [loading, setLoading] = useState(false)
@@ -125,7 +126,10 @@ export default function AdminPage() {
               <p className="text-gray-600 dark:text-gray-400 mt-2">Manage test data for development</p>
             </div>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-3">
+            <HumanBadge />
+            <ThemeToggle />
+          </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">

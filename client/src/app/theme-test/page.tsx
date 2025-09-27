@@ -1,4 +1,5 @@
 import ThemeToggle from '@/components/ThemeToggle';
+import HumanBadge from '@/components/HumanBadge';
 
 export default function ThemeTest() {
   return (
@@ -9,7 +10,10 @@ export default function ThemeTest() {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Theme Toggle Test
           </h1>
-          <ThemeToggle />
+          <div className="flex items-center gap-3">
+            <HumanBadge />
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Test Cards */}

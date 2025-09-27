@@ -6,6 +6,7 @@ import { supabase } from '@/utils/supabaseClient'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import ThemeToggle from '@/components/ThemeToggle'
+import HumanBadge from '@/components/HumanBadge'
 
 type Task = {
   description: string;
@@ -124,7 +125,10 @@ export default function CreateAppPage() {
             <Link href="/" className="text-indigo-600 dark:text-blue-400 hover:underline">
                 &larr; Back to Home
             </Link>
-            <ThemeToggle />
+            <div className="flex items-center gap-3">
+              <HumanBadge />
+              <ThemeToggle />
+            </div>
         </nav>
         <div className="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-4 mb-8">

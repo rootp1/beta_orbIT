@@ -10,8 +10,8 @@ export default function VerifyWithWorldIDButton({ walletAddress }: { walletAddre
   const handleVerify = async () => {
     setIsVerifying(true)
     try {
-      if (!MiniKit.isInstalled()) {
-        throw new Error('Please open this in the World App.');
+      if (typeof (MiniKit as any)?.commandsAsync?.verify !== 'function') {
+        throw new Error('World App not detected. Please open this in the World App or use the browser flow.');
       }
       
       const { finalPayload } = await MiniKit.commandsAsync.verify({
@@ -21,7 +21,8 @@ export default function VerifyWithWorldIDButton({ walletAddress }: { walletAddre
       })
 
       if (finalPayload.status === 'error') {
-        throw new Error(finalPayload.detail || 'Verification failed in World App.');
+        const detail = (finalPayload as any)?.detail || (finalPayload as any)?.message
+        throw new Error(detail || 'Verification failed in World App.');
       }
 
       // Verify the proof in the backend

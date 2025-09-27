@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
-    "@worldcoin/idkit": "^2.4.1",
     "@worldcoin/minikit-js": "^1.9.6",
     "ethers": "^6.15.0",
     "next": "15.5.4",

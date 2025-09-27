@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/utils/supabaseClient'
 import ThemeToggle from '@/components/ThemeToggle'
-import WorldIDVerificationGate from '@/components/WorldIDVerificationGate'
+import HumanBadge from '@/components/HumanBadge'
 
 type App = {
   id: string;
@@ -111,6 +111,7 @@ export default function AppDiscoveryPage() {
               <Link href="/apps/admin" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors text-sm font-medium">
                 Admin Panel
               </Link>
+              <HumanBadge />
               <ThemeToggle />
               <Link href="/" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors font-medium">
                 ← Back to Home
@@ -163,9 +164,5 @@ export default function AppDiscoveryPage() {
     </div>
   );
 
-  return (
-    <WorldIDVerificationGate onVerificationComplete={handleVerificationComplete}>
-      {appsPageContent}
-    </WorldIDVerificationGate>
-  );
+  return appsPageContent;
 }
