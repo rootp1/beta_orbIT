@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/utils/supabaseClient'
 import ThemeToggle from '@/components/ThemeToggle'
+import WorldIDVerificationGate from '@/components/WorldIDVerificationGate'
 
 type App = {
   id: string;
@@ -61,6 +62,7 @@ const AppCard = ({ app }: { app: App }) => (
 export default function AppDiscoveryPage() {
   const [apps, setApps] = useState<App[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
     const fetchActiveApps = async () => {
@@ -81,10 +83,17 @@ export default function AppDiscoveryPage() {
       }
     };
 
-    fetchActiveApps();
-  }, []);
+    // Only fetch apps if verified
+    if (isVerified) {
+      fetchActiveApps();
+    }
+  }, [isVerified]);
 
-  return (
+  const handleVerificationComplete = () => {
+    setIsVerified(true);
+  };
+
+  const appsPageContent = (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navigation */}
       <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -152,5 +161,11 @@ export default function AppDiscoveryPage() {
         )}
       </div>
     </div>
+  );
+
+  return (
+    <WorldIDVerificationGate onVerificationComplete={handleVerificationComplete}>
+      {appsPageContent}
+    </WorldIDVerificationGate>
   );
 }
