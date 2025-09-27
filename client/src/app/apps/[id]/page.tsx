@@ -39,12 +39,50 @@ export default function AppDetailPage() {
   const [fullscreenIframe, setFullscreenIframe] = useState(false)
   const [iframeError, setIframeError] = useState(false)
   const [iframeLoading, setIframeLoading] = useState(true)
+  const [appActivity, setAppActivity] = useState<any[]>([])
+  const [autoCompletedTasks, setAutoCompletedTasks] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     if (id) {
       fetchAppAndTasks()
     }
   }, [id])
+
+  // Listen for messages from the sandboxed iframe
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Security check - only accept messages from iframe
+      if (!showIframe) return;
+      
+      try {
+        const message = event.data;
+        
+        // Check if it's our task completion signal (simple string)
+        if (typeof message === 'string' && (message === 'app_loaded' || message === 'qr_generated' || message === 'qr_downloaded')) {
+          console.log('📨 Received task completion signal:', message);
+          
+          // Add to activity log
+          setAppActivity(prev => [...prev, {
+            action: message,
+            timestamp: new Date().toISOString(),
+            receivedAt: new Date().toISOString()
+          }]);
+          
+          // Auto-complete tasks based on the action
+          handleAutoTaskCompletion(message);
+        }
+      } catch (error) {
+        console.error('Error handling iframe message:', error);
+      }
+    };
+
+    // Add message listener
+    window.addEventListener('message', handleMessage);
+    
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [showIframe, tasks]);
 
   const fetchAppAndTasks = async () => {
     setLoading(true)
@@ -98,6 +136,49 @@ export default function AppDetailPage() {
       setSubmitting(null)
       alert('Task completed successfully! Reward earned.')
     }, 1000)
+  }
+
+  // Auto-complete tasks based on iframe signals
+  const handleAutoTaskCompletion = (action: string) => {
+    console.log('🎯 Processing auto task completion:', action);
+    
+    // Define task completion mapping based on actions
+    const taskCompletionRules = {
+      'qr_generated': (tasks: Task[]) => {
+        // Complete "User Registration Test" or any task mentioning QR generation
+        return tasks.find(task => 
+          task.title.toLowerCase().includes('registration') ||
+          task.description.toLowerCase().includes('qr') ||
+          task.description.toLowerCase().includes('generate')
+        );
+      },
+      'qr_downloaded': (tasks: Task[]) => {
+        // Complete "Core Feature Testing" or download-related tasks
+        return tasks.find(task => 
+          task.title.toLowerCase().includes('core') ||
+          task.description.toLowerCase().includes('download') ||
+          task.description.toLowerCase().includes('feature')
+        );
+      }
+    };
+
+    const rule = taskCompletionRules[action as keyof typeof taskCompletionRules];
+    if (rule) {
+      const taskToComplete = rule(tasks);
+      
+      if (taskToComplete && !completedTasks.has(taskToComplete.id) && !autoCompletedTasks.has(taskToComplete.id)) {
+        // Mark as auto-completed
+        setAutoCompletedTasks(prev => new Set([...prev, taskToComplete.id]));
+        setCompletedTasks(prev => new Set([...prev, taskToComplete.id]));
+        
+        // Show success notification
+        setTimeout(() => {
+          alert(`🎉 Task "${taskToComplete.title}" completed automatically! You earned ${taskToComplete.per_task_reward} WLD.`);
+        }, 500);
+        
+        console.log('✅ Auto-completed task:', taskToComplete.title);
+      }
+    }
   }
 
   const totalReward = tasks.reduce((sum, task) => 
@@ -343,6 +424,32 @@ export default function AppDetailPage() {
           </div>
         )}
 
+        {/* Activity Monitor (only show when iframe is active) */}
+        {showIframe && appActivity.length > 0 && (
+          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl p-6 mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <h3 className="text-lg font-semibold text-green-800 dark:text-green-300">Live Activity Monitor</h3>
+            </div>
+            <div className="space-y-2 max-h-32 overflow-y-auto">
+              {appActivity.slice(-5).map((activity, index) => (
+                <div key={index} className="flex items-center justify-between text-sm bg-white dark:bg-green-900/30 rounded-lg p-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-green-600 dark:text-green-400 font-medium">
+                      {activity.action === 'app_loaded' && '🚀 App Ready'}
+                      {activity.action === 'qr_generated' && '✨ QR Generated'}
+                      {activity.action === 'qr_downloaded' && '📥 QR Downloaded'}
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {new Date(activity.receivedAt).toLocaleTimeString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Tasks Section */}
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Testing Tasks</h2>
@@ -364,8 +471,12 @@ export default function AppDetailPage() {
                         {task.per_task_reward} WLD
                       </span>
                       {completedTasks.has(task.id) && (
-                        <span className="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
-                          ✓ Completed
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          autoCompletedTasks.has(task.id) 
+                            ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400" 
+                            : "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
+                        }`}>
+                          {autoCompletedTasks.has(task.id) ? '🤖 Auto-Completed' : '✓ Completed'}
                         </span>
                       )}
                     </div>

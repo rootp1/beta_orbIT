@@ -16,7 +16,19 @@ type Task = {
 export default function CreateAppPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { walletAddress } = useAuth();
+  const { walletAddress, isAuthenticated, isLoading: authLoading } = useAuth();
+
+  // Show loading while auth is initializing
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const [appName, setAppName] = useState('');
   const [appDescription, setAppDescription] = useState('');
@@ -29,8 +41,8 @@ export default function CreateAppPage() {
     return tasks.reduce((total, task) => total + (task.per_task_reward || 0), 0);
   };
 
-  // If user is not logged in, don't show the create app form
-  if (!walletAddress) {
+  // If user is not authenticated, don't show the create app form
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
         <div className="bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-700 text-center max-w-md">

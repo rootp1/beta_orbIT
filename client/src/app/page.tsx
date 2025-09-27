@@ -8,8 +8,20 @@ import { useAuth } from "@/context/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
-  const { walletAddress, setWalletAddress } = useAuth();
+  const { walletAddress, isAuthenticated, isLoading, login, logout } = useAuth();
   const [selectedMode, setSelectedMode] = useState<'user' | 'developer' | null>(null);
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Show mode selection if no mode is chosen
   if (!selectedMode) {
@@ -20,10 +32,32 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-20">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-indigo-600 dark:bg-blue-600 rounded-lg"></div>
+                <img 
+                  src="/logo.png" 
+                  alt="Orbital Logo" 
+                  className="w-8 h-8 rounded-lg"
+                />
                 <span className="font-bold text-2xl text-gray-900 dark:text-white">Orbital</span>
               </div>
-              <ThemeToggle />
+              <div className="flex items-center space-x-4">
+                {isAuthenticated && (
+                  <div className="flex items-center space-x-3">
+                    <div className="text-sm">
+                      <span className="text-gray-500 dark:text-gray-400">Connected:</span>
+                      <span className="ml-1 font-mono text-indigo-600 dark:text-blue-400">
+                        {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
+                      </span>
+                    </div>
+                    <button
+                      onClick={logout}
+                      className="text-sm bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-700 dark:text-red-300 px-3 py-1 rounded-lg transition-colors"
+                    >
+                      Disconnect
+                    </button>
+                  </div>
+                )}
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         </nav>
@@ -153,11 +187,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-indigo-600 dark:bg-blue-600 rounded-lg"></div>
+              <img 
+                src="/logo.png" 
+                alt="Orbital Logo" 
+                className="w-8 h-8 rounded-lg"
+              />
               <span className="font-bold text-xl text-gray-900 dark:text-white">Orbital Developer Portal</span>
             </div>
             <div className="flex items-center space-x-6">
-              {walletAddress ? (
+              {isAuthenticated ? (
                 <>
                   <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors font-medium">
                     Dashboard
@@ -165,6 +203,18 @@ export default function Home() {
                   <Link href="/dashboard/create" className="bg-indigo-600 hover:bg-indigo-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors text-sm font-semibold">
                     Create Campaign
                   </Link>
+                  <div className="text-sm">
+                    <span className="text-gray-500 dark:text-gray-400">Connected:</span>
+                    <span className="ml-1 font-mono text-indigo-600 dark:text-blue-400">
+                      {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
+                    </span>
+                  </div>
+                  <button
+                    onClick={logout}
+                    className="text-sm bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-700 dark:text-red-300 px-3 py-1 rounded-lg transition-colors"
+                  >
+                    Disconnect
+                  </button>
                 </>
               ) : null}
               <ThemeToggle />
@@ -208,7 +258,7 @@ export default function Home() {
               <p className="text-gray-600 dark:text-gray-300 mb-10 text-lg leading-relaxed">
                 Authenticate securely using your wallet to access all developer features and campaign management tools.
               </p>
-              <SignInWithWalletButton onSignInSuccess={setWalletAddress} />
+              <SignInWithWalletButton onSignInSuccess={login} />
             </div>
           </div>
         ) : (

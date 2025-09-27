@@ -23,8 +23,20 @@ type App = {
 export default function DashboardPage() {
   const [apps, setApps] = useState<App[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { walletAddress } = useAuth();
+  const { walletAddress, isAuthenticated, isLoading: authLoading, logout } = useAuth();
   const router = useRouter();
+
+  // Show loading while auth is initializing
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const publishApp = async (appId: string) => {
     try {
@@ -51,8 +63,8 @@ export default function DashboardPage() {
     }
   };
 
-  // If user is not logged in, don't show the dashboard content
-  if (!walletAddress) {
+  // If user is not authenticated, don't show the dashboard content
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
         <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 text-center max-w-md">
@@ -123,6 +135,18 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
+            <div className="text-sm text-right">
+              <p className="text-gray-500 dark:text-gray-400">Connected as:</p>
+              <p className="font-mono text-indigo-600 dark:text-blue-400">
+                {walletAddress?.slice(0, 8)}...{walletAddress?.slice(-6)}
+              </p>
+            </div>
+            <button
+              onClick={logout}
+              className="text-sm bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-700 dark:text-red-300 px-4 py-2 rounded-lg transition-colors font-medium"
+            >
+              Disconnect
+            </button>
             <ThemeToggle />
             <Link href="/dashboard/create">
               <button className="bg-indigo-600 hover:bg-indigo-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
