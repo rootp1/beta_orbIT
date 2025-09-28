@@ -21,8 +21,8 @@ interface TaskData {
 }
 
 export default function TaskCompletionFlow({ taskId, onTaskCompleted }: TaskCompletionFlowProps) {
-  const [currentStep, setCurrentStep] = useState<CompletionStep>('verification')
-  const [walletAddress, setWalletAddress] = useState<string>('')
+  const [currentStep, setCurrentStep] = useState<CompletionStep>('task-details')
+  const [walletAddress, setWalletAddress] = useState<string>('0xTestWallet123') // Default test wallet for non-verified users
   const [taskData, setTaskData] = useState<TaskData | null>(null)
   const [hasCompleted, setHasCompleted] = useState<boolean>(false)
   const [isLoadingTask, setIsLoadingTask] = useState(false)
@@ -30,12 +30,12 @@ export default function TaskCompletionFlow({ taskId, onTaskCompleted }: TaskComp
   const { completeTask, isLoading } = useTaskEscrowTransactions()
   const { getTask, hasCompletedTask } = useTaskEscrowData()
 
-  // Load task data when wallet is connected
+  // Load task data immediately without requiring wallet verification
   useEffect(() => {
-    if (walletAddress && taskId) {
+    if (taskId) {
       loadTaskData()
     }
-  }, [walletAddress, taskId])
+  }, [taskId])
 
   const loadTaskData = async () => {
     setIsLoadingTask(true)
@@ -55,7 +55,7 @@ export default function TaskCompletionFlow({ taskId, onTaskCompleted }: TaskComp
       })
       
       setHasCompleted(completed)
-      setCurrentStep('task-details')
+      // Already starting at task-details, no need to change step
     } catch (error) {
       console.error('Failed to load task data:', error)
       alert('Failed to load task data. Please try again.')
@@ -91,28 +91,21 @@ export default function TaskCompletionFlow({ taskId, onTaskCompleted }: TaskComp
       <div className="flex items-center space-x-4">
         <StepIndicator 
           step={1} 
-          title="Verify" 
-          isActive={currentStep === 'verification'} 
-          isComplete={!!walletAddress} 
-        />
-        <Arrow />
-        <StepIndicator 
-          step={2} 
-          title="Task" 
+          title="Task Details" 
           isActive={currentStep === 'task-details'} 
           isComplete={currentStep === 'complete' || currentStep === 'reward'} 
         />
         <Arrow />
         <StepIndicator 
-          step={3} 
-          title="Complete" 
+          step={2} 
+          title="Complete Task" 
           isActive={currentStep === 'complete'} 
           isComplete={currentStep === 'reward'} 
         />
         <Arrow />
         <StepIndicator 
-          step={4} 
-          title="Reward" 
+          step={3} 
+          title="Claim Reward" 
           isActive={currentStep === 'reward'} 
           isComplete={false} 
         />
@@ -184,9 +177,14 @@ export default function TaskCompletionFlow({ taskId, onTaskCompleted }: TaskComp
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                   Complete Task
                 </h2>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
                   Review the task details and earn your reward
                 </p>
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 max-w-md mx-auto">
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    ⚠️ Testing Mode: Human verification bypassed for open access
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-6">

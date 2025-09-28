@@ -62,7 +62,6 @@ const AppCard = ({ app }: { app: App }) => (
 export default function AppDiscoveryPage() {
   const [apps, setApps] = useState<App[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
     const fetchActiveApps = async () => {
@@ -83,15 +82,9 @@ export default function AppDiscoveryPage() {
       }
     };
 
-    // Only fetch apps if verified
-    if (isVerified) {
-      fetchActiveApps();
-    }
-  }, [isVerified]);
-
-  const handleVerificationComplete = () => {
-    setIsVerified(true);
-  };
+    // Fetch apps immediately without verification
+    fetchActiveApps();
+  }, []);
 
   const appsPageContent = (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -130,7 +123,7 @@ export default function AppDiscoveryPage() {
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-8 tracking-tight">Discover Apps to Test</h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl mx-auto leading-relaxed">
-            Choose an application to test, complete the verification tasks, and earn WLD rewards for your valuable feedback.
+            Choose an application to test and provide feedback. Open access for all users during testing phase.
           </p>
         </div>
 
