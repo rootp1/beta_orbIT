@@ -95,10 +95,10 @@ export default function AppDiscoveryPage() {
             <div className="flex items-center space-x-3">
               <img 
                 src="/logo.png" 
-                alt="Orbital Logo" 
+                alt="betaORBit Logo" 
                 className="w-8 h-8 rounded-lg"
               />
-              <span className="font-bold text-xl text-gray-900 dark:text-white">Orbital Tester Portal</span>
+              <span className="font-bold text-xl text-gray-900 dark:text-white">betaORBit Tester Portal</span>
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/apps/admin" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors text-sm font-medium">

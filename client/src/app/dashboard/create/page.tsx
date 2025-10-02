@@ -132,11 +132,11 @@ export default function CreateAppPage() {
         </nav>
         <div className="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-4 mb-8">
-                <img 
-                    src="/logo.png" 
-                    alt="Orbital Logo" 
-                    className="w-16 h-16 rounded-xl"
-                />
+        <img 
+          src="/logo.png" 
+          alt="betaORBit Logo" 
+          className="w-16 h-16 rounded-xl"
+        />
                 <div>
                     <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">Submit Your Application</h1>
                     <p className="text-gray-600 dark:text-gray-300 text-lg">List your application on the platform for community testing and feedback.</p>

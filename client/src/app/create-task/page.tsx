@@ -19,10 +19,10 @@ export default function CreateTaskPage() {
               <Link href="/" className="flex items-center space-x-3">
                 <img 
                   src="/logo.png" 
-                  alt="Orbital Logo" 
+                  alt="betaORBit Logo" 
                   className="w-8 h-8 rounded-lg"
                 />
-                <span className="font-bold text-xl text-gray-900 dark:text-white">Orbital</span>
+                <span className="font-bold text-xl text-gray-900 dark:text-white">betaORBit</span>
               </Link>
               <span className="text-gray-400">•</span>
               <span className="text-gray-600 dark:text-gray-400">Create Task</span>

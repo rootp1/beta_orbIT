@@ -35,10 +35,10 @@ export default function Home() {
               <div className="flex items-center space-x-3">
                 <img 
                   src="/logo.png" 
-                  alt="Orbital Logo" 
+                  alt="betaORBit Logo" 
                   className="w-8 h-8 rounded-lg"
                 />
-                <span className="font-bold text-2xl text-gray-900 dark:text-white">Orbital</span>
+                <span className="font-bold text-2xl text-gray-900 dark:text-white">betaORBit</span>
               </div>
               <div className="flex items-center space-x-4">
                 {isAuthenticated && (
@@ -70,12 +70,12 @@ export default function Home() {
             <div className="flex justify-center mb-8">
               <img 
                 src="/logo.png" 
-                alt="Orbital Logo" 
+                alt="betaORBit Logo" 
                 className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl shadow-lg"
               />
             </div>
             <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 dark:text-white mb-8 tracking-tight">
-              Welcome to Orbital
+              Welcome to betaORBit
             </h1>
             <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 mb-6 max-w-4xl mx-auto leading-relaxed">
               Decentralized app testing platform with World ID authentication
@@ -165,7 +165,7 @@ export default function Home() {
           {/* Footer */}
           <footer className="mt-24 pt-12 border-t border-gray-200 dark:border-gray-700">
             <div className="text-center text-gray-500 dark:text-gray-400">
-              <p className="text-sm font-medium">© 2025 Orbital Platform. Built with Next.js, World ID, and MiniKit.</p>
+              <p className="text-sm font-medium">© 2025 betaORBit Platform. Built with Next.js, World ID, and MiniKit.</p>
               <p className="text-xs mt-3 tracking-wide">Decentralized • Secure • Transparent</p>
             </div>
           </footer>
@@ -191,10 +191,10 @@ export default function Home() {
             <div className="flex items-center space-x-3">
               <img 
                 src="/logo.png" 
-                alt="Orbital Logo" 
+                alt="betaORBit Logo" 
                 className="w-8 h-8 rounded-lg"
               />
-              <span className="font-bold text-xl text-gray-900 dark:text-white">Orbital Developer Portal</span>
+              <span className="font-bold text-xl text-gray-900 dark:text-white">betaORBit Developer Portal</span>
             </div>
             <div className="flex items-center space-x-6">
               {isAuthenticated ? (
@@ -376,7 +376,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-20 pt-8 border-t border-gray-200">
           <div className="text-center text-gray-500">
-            <p className="text-sm font-medium">© 2025 Orbital Developer Platform. Built with Next.js, World ID, and MiniKit.</p>
+            <p className="text-sm font-medium">© 2025 betaORBit Developer Platform. Built with Next.js, World ID, and MiniKit.</p>
             <p className="text-xs mt-2 tracking-wide">Secure • Decentralized • Developer-Friendly</p>
           </div>
         </footer>

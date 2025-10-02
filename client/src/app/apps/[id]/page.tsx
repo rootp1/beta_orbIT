@@ -144,24 +144,25 @@ export default function AppDetailPage() {
     console.log('🎯 Processing auto task completion:', action);
     
     // Define task completion mapping based on actions
+    const toLC = (s?: string | null) => (s ?? '').toLowerCase();
     const taskCompletionRules = {
-      'qr_generated': (tasks: Task[]) => {
+      qr_generated: (tasks: Task[]) => {
         // Complete "User Registration Test" or any task mentioning QR generation
-        return tasks.find(task => 
-          task.title.toLowerCase().includes('registration') ||
-          task.description.toLowerCase().includes('qr') ||
-          task.description.toLowerCase().includes('generate')
-        );
+        return tasks.find(task => {
+          const t = toLC(task?.title);
+          const d = toLC(task?.description);
+          return t.includes('registration') || d.includes('qr') || d.includes('generate');
+        });
       },
-      'qr_downloaded': (tasks: Task[]) => {
+      qr_downloaded: (tasks: Task[]) => {
         // Complete "Core Feature Testing" or download-related tasks
-        return tasks.find(task => 
-          task.title.toLowerCase().includes('core') ||
-          task.description.toLowerCase().includes('download') ||
-          task.description.toLowerCase().includes('feature')
-        );
+        return tasks.find(task => {
+          const t = toLC(task?.title);
+          const d = toLC(task?.description);
+          return t.includes('core') || d.includes('download') || d.includes('feature');
+        });
       }
-    };
+    } as const;
 
     const rule = taskCompletionRules[action as keyof typeof taskCompletionRules];
     if (rule) {
@@ -220,7 +221,7 @@ export default function AppDetailPage() {
             <div className="flex items-center space-x-3">
               <img 
                 src="/logo.png" 
-                alt="Orbital Logo" 
+                alt="betaORBit Logo" 
                 className="w-8 h-8 rounded-lg"
               />
               <span className="font-bold text-xl text-gray-900 dark:text-white">App Testing</span>

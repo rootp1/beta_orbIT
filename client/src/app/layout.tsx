@@ -9,10 +9,10 @@ import { ThemeProvider } from "@/context/ThemeContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Orbital - Decentralized Campaign Platform",
+  title: "betaORBit - Decentralized Campaign Platform",
   description: "Launch and manage decentralized campaigns with World ID authentication and blockchain-powered funding.",
   keywords: "blockchain, campaigns, World ID, decentralized, funding, crypto",
-  authors: [{ name: "Orbital Team" }],
+  authors: [{ name: "betaORBit Team" }],
   robots: "index, follow",
   icons: {
     icon: "/logo.png",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     apple: "/logo.png",
   },
   openGraph: {
-    title: "Orbital - Decentralized Campaign Platform",
+    title: "betaORBit - Decentralized Campaign Platform",
     description: "Launch and manage decentralized campaigns with World ID authentication",
     type: "website",
     locale: "en_US",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
         url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: "Orbital Logo",
+  alt: "betaORBit Logo",
       },
     ],
   },

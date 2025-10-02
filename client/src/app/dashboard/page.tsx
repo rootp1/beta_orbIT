@@ -127,7 +127,7 @@ export default function DashboardPage() {
           <div className="flex items-center space-x-4">
             <img 
               src="/logo.png" 
-              alt="Orbital Logo" 
+              alt="betaORBit Logo" 
               className="w-16 h-16 rounded-xl"
             />
             <div>

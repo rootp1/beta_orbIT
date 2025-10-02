@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   // Allow cross-origin requests from your ngrok domain
   allowedDevOrigins: [
     "allowedly-retractible-ladawn.ngrok-free.dev",
+    "yttric-socorro-maniacally.ngrok-free.dev",
     // Add any other domains you use for development
     "localhost",
     "127.0.0.1"
